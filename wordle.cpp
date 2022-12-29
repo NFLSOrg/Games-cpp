@@ -128,41 +128,6 @@ void play(){
 	}
 	for(i=0;i<10;i++){cout<<'\b';}
 	if(user=="rstrt"){eNd("restart");}
-	if(user=="ggscr"){system("start chrome -incognito");exit(0);}
-	if(user=="atcdr"){system("start https://atcoder.jp/");exit(0);}
-	if(user=="csdnn"){system("start https://blog.csdn.net/");exit(0);}
-	if(user=="luogu"){system("start http://www.luogu.com.cn/");exit(0);}
-	if(user=="ylsss"){system("start http://www.nfls.com.cn:10443/");exit(0);}
-	if(user=="ellsy"){system("start http://www.nfls.com.cn:20031/");exit(0);}
-	if(user=="ellsw"){system("start http://www.nfls.com.cn:20035/");exit(0);}
-	if(user=="cdfcs"){system("start https://codeforces.com/problemset/");exit(0);}
-	if(user=="gnrls"){system("start chrome -incognito https://generals.io/");exit(0);}
-	if(user=="blblb"){system("start chrome -incognito https://bilibili.com/");exit(0);}
-	/*if(user=="plwrd"){
-		cout<<"\b\b\b\b\b\b\b\b\b         \b\b\b\b\b\b\b\b\b";
-		cin>>adwrd;
-		if(adwrd=="qt"){play();}
-		cin>>adchn;
-		if(search(wrds,cnt1,adwrd)!=-1){
-			color("cyan");
-			cout<<"The word exists.";Sleep(1000);
-			for(j=0;j<16;j++){cout<<"\b \b";}
-			play();
-		}
-		if(adwrd.size()!=5){
-			color("red");
-			cout<<"Please input a word of correct length.";Sleep(1500);
-			for(j=0;j<38;j++){cout<<"\b \b";}
-			play();
-		}
-		ofile<<"\n"<<adwrd<<"   "<<adchn;cnt1++;
-		color("yellow");
-		cout<<"Word added.";
-		Sleep(750);
-		opr();
-		for(j=0;j<67;j++){cout<<"\b \b";}
-		play();
-	}*/
 	if(search(wrds,cnt1,user)==-1){
 		color("red");Sleep(500);
 		for(j=0;j<15;j++){cout<<" ";}
