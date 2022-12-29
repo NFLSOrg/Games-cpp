@@ -1,2 +1,2 @@
-free small games
+free small games, 
 play whatever you want
