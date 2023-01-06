@@ -109,41 +109,7 @@ inline int tkdig(int tk) {
 void Custom() {
     
 }
-string choosemap() {/*
-    vector<string> files, mpfiles;
-	char buffer[MAX_PATH];
-	getcwd(buffer, MAX_PATH);
-	string filePath;
-	filePath.assign(buffer).append("\\");
-	getFiles(filePath, "", files);
-    mpfiles.push_back("random");
-    for (int i = 0; i < files.size(); i++) {
-        if (files[i].size() > 4) {
-            if (files[i].substr(0, 4) == "gmap") {
-                mpfiles.push_back(files[i].substr(5));
-            }
-        }
-    }
-    cls();
-    int csd = 0, asdf, sise = mpfiles.size();
-    while (asdf != 13) {
-        cout << "choose a map:\n";
-        for (int i = 0; i < sise; i++) {
-            cout << (i == csd ? "> " : "  ");
-            cout << mpfiles[i] << "\n";
-        }
-    //    cout << (csd == sise ? "> " : "  ") << "custom map\n";
-        asdf = getch();
-        if (asdf == 72) csd = max(csd - 1, 0);
-        if (asdf == 80) csd = min(sise - 1, csd + 1);
-        clss();
-    }
-    if (csd != sise)
-        return mpfiles[csd];
-    else {
-        Custom();
-        return choosemap();
-    }*/
+string choosemap() {
     return "random";
 }
 void getmap(string str, int a, int b) {
@@ -432,11 +398,19 @@ void Capture(int er, int ed) {
 		return ;
 	}
 }
-int MarchTo(int sx, int sy, int ex, int ey, int who) {
+int MarchTo(int sx, int sy, int ex, int ey, int who) {/*
+    color(colors[who]);
+    Pos(112, 10 + who * 2);
+    cout << sx << " " << sy << " " << ex << " " << ey;
+    Pos(112, 11 + who * 2);
+    cout << AItarg[who].xx << " " << AItarg[who].yy;*/
 	int usable = (mp[sx][sy].armys / ((sx == nx && sy == ny && halfarmy[who]) + 1)) - 1 + halfarmy[who];
 	int left = mp[sx][sy].armys - usable;
 	if (mp[sx][sy].owner != who || mp[ex][ey].type == -1 || ex < 1 || ey < 1 || ex > H || ey > W || 
-		(who >= 2 && mp[ex][ey].type == 1 && mp[ex][ey].armys > mp[sx][sy].armys)) {
+		(who >= 2 && mp[ex][ey].type == 1 && mp[ex][ey].armys > mp[sx][sy].armys && mp[ex][ey].owner == 0)) {
+        if (AItarg[who].xx == ex && AItarg[who].yy == ey) {
+            AItarg[who].xx = -1;
+        }
 		return -1;
 	}
 	if (mp[sx][sy].owner == mp[ex][ey].owner) {
@@ -536,7 +510,7 @@ bool capitalseen(int whose) {
 	return false;
 }
 void MoveAI(int num) {
-	int nposx = AIPos[num].xx, nposy = AIPos[num].yy, opt = rand() % (turns + 5), AIdir = rand() % 4;
+	int nposx = AIPos[num].xx, nposy = AIPos[num].yy, opt = rand() % min(200, turns + 5), AIdir = rand() % 4;
 	if (mp[nposx][nposy].armys == 0 || mp[nposx][nposy].armys == 1 || mp[nposx][nposy].owner != num || opt == 1) {
 		Position mostarm = mostarmy(num);
 		nposx = mostarm.xx, nposy = mostarm.yy;
@@ -592,7 +566,9 @@ void MoveAI(int num) {
 		AItarg[num].xx = pers.xx, AItarg[num].yy = pers.yy;
 		AItargtype[num] = 9;
 	}
-	if (mp[AItarg[num].xx][AItarg[num].yy].type != 9 && AItargtype[num] == 9) {
+	if ((mp[AItarg[num].xx][AItarg[num].yy].type != 9 ||
+         mp[AItarg[num].xx][AItarg[num].yy].armys > mp[AIPos[num].xx][AIPos[num].yy].armys * 20) &&
+         AItargtype[num] == 9) {
 		AItarg[num].xx = -1;
 	} else if (nposx == AItarg[num].xx && nposy == AItarg[num].yy && AItargtype[num] == 0 && AItarg[num].xx != -1) {
 		AItarg[num].xx = -1;
@@ -609,6 +585,7 @@ void MoveAI(int num) {
 }
 void Start() {
 	cls();
+    finished = false;
 	while (!finished) {
 		for (int i = 0; i < 25 && !finished; i++) {
 			for (int j = 0; j <= 1; j++) {
@@ -682,14 +659,13 @@ void Start() {
 				for (int i = 2; i < 2 + players; i++) {
 					MoveAI(i);
 				}
-                int t1 = clock();
-				Print();
-                int t2 = clock();
-                tad == 0 ? tad = (t2 - t1) * 1.0 / CLOCKS_PER_SEC * 1000.0 : 0;
-            //    cout << (t2 - t1) * 1.0 / CLOCKS_PER_SEC * 1000.0;
             //    system("pause");
 				clss();
-				Sleep(12 + 122 - tad);
+                int t1 = clock();
+            	Print();
+                int t2 = clock();
+                tad == 0 ? tad = (t2 - t1) * 1.0 / CLOCKS_PER_SEC * 1000.0 : 0;
+				Sleep(max(12 + 122 - tad, 0));
 			}
 			Updatecity();
 			turns++;
